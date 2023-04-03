@@ -1,1 +1,19 @@
-<p>upload works!</p>
+<h1>Upload an Image</h1>
+
+<form [formGroup]="form" (ngSubmit)="upload()">
+    <table>
+        <tr>
+            <!-- TODO: updtae img when upload -->
+        </tr>
+        <tr>
+            Image: 
+            <!-- input file type, accepts images -->
+            <input type="file" accept="image/*" formControlName="image-file" #file>
+        </tr>
+        <tr>
+            <input type="text" placeholder="comments" formControlName="comment">
+        </tr>
+        <button type="submit">Upload Image</button>
+    </table>
+
+</form>

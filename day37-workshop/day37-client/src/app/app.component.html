@@ -1,6 +1,8 @@
 <h1> {{ title }} </h1>
 <div class="navbar">
-  <a [routerLink]="['/home']">Home</a>
+  <a [routerLink]="['/']">Home</a>
   &nbsp;
-  <a [routerLink]="['/upload']">Upload Image</a>
+  <a [routerLink]="['/display']">Images</a>
+
 </div>
+<router-outlet></router-outlet>

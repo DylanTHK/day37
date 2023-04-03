@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { UploadService } from './services/upload.service';
+import { DisplayComponent } from './components/display/display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    UploadComponent
+    UploadComponent,
+    DisplayComponent,
   ],
   imports: [
     BrowserModule,

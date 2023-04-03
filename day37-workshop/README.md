@@ -9,4 +9,4 @@ GOAL:
 
 
 ## Running Angular with proxy (base URL)
-ng server --proxy-config src/proxy.config.js
+ng serve --proxy-config src/proxy.config.js
