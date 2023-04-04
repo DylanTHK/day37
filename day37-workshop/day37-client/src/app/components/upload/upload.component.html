@@ -3,15 +3,25 @@
 <form [formGroup]="form" (ngSubmit)="upload()">
     <table>
         <tr>
-            <!-- TODO: updtae img when upload -->
+            <!-- TODO: update img when upload -->
         </tr>
         <tr>
-            Image: 
-            <!-- input file type, accepts images -->
-            <input type="file" accept="image/*" formControlName="image-file" #file>
+            <td>
+                Image: 
+            </td>
+            <td>
+                <!-- input file type, accepts images -->
+                <input #file type="file" accept="image/*" 
+                    formControlName="image" (change)="onImageUpdate($event)">
+            </td>
         </tr>
         <tr>
-            <input type="text" placeholder="comments" formControlName="comment">
+            <td>
+                Comment:
+            </td>
+            <td>
+                <input type="text" placeholder="comments" formControlName="comment">
+            </td>
         </tr>
         <button type="submit">Upload Image</button>
     </table>

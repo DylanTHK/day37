@@ -4,7 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { UploadComponent } from './components/upload/upload.component';
 
 const routes: Routes = [
-  {path: "", component: HomeComponent},
+  {path: "", component: UploadComponent},
   {path: "home", component: HomeComponent},
   {path: "upload", component: UploadComponent},
   {path: "**", redirectTo: "/", pathMatch: "full"}

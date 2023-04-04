@@ -15,5 +15,8 @@ CREATE TABLE posts (
 DESCRIBE posts;
 
 INSERT INTO posts (blobc, name, comment) VALUES('image url', 'nooblet', "noob comment");
+INSERT INTO posts (blobc, name, comment) VALUES (?,?,?);
 
 SELECT * from posts;
+
+SELECT * FROM posts WHERE ID=1;

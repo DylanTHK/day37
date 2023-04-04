@@ -11,12 +11,13 @@ export class UploadService {
   constructor(private httpClient: HttpClient) { }
 
   uploadImage(data: FormData) {
-    console.info("Received name: ", data.get('name'));
+    console.info("INSIDE SERVICE");
+
     console.info("Received comment: ", data.get('comment'));
-    console.info("Received file: ", data.get('file'));
+    console.info("Received file: ", data.get('picture'));
 
     return firstValueFrom(
-      this.httpClient.post<UploadResults>("/api/post", data));
+      this.httpClient.post("/api/post", data));
   }
 
 }
