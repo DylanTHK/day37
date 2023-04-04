@@ -3,6 +3,7 @@ package com.workshop.day37server.controllers;
 import java.io.IOException;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.Response;
 import com.workshop.day37server.models.Post;
-import com.workshop.day37server.repositories.UploadRepo;
+import com.workshop.day37server.services.S3Service;
 import com.workshop.day37server.services.UploadSvc;
 
 import jakarta.json.Json;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping(path="/api")
@@ -28,9 +32,9 @@ public class UploadController {
     @Autowired
     private UploadSvc uploadSvc;
 
-    // FIXME: CHANGE THIS TO SERVICE -> REPO
     @Autowired
-    private UploadRepo uploadRepo;
+    private S3Service s3Svc;
+
 
     @PostMapping(path="/post",
         consumes=MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -39,13 +43,9 @@ public class UploadController {
         // variable names here need to match keys in FormData
         @RequestPart MultipartFile picture,
         @RequestPart String comment) throws IOException {
-
-        System.out.println("Entered Post Image Method");
         
         // pass data to sql (store name, comment, blob)
         String rString = uploadSvc.uploadImage(comment, picture);
-        
-        // TODO: store blob to s3
 
         // returning response
         if (rString != null) {
@@ -58,9 +58,9 @@ public class UploadController {
                 .add("error", "Nothing inserted")
                 .build().toString();
             return ResponseEntity
-            .status(HttpStatus.NOT_MODIFIED)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(msg);
+                .status(HttpStatus.NOT_MODIFIED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(msg);
         }
         
     }
@@ -85,6 +85,39 @@ public class UploadController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(opt.get().toJson().toString());
         }
-
     }
+
+    @PostMapping(path="/posts3",
+    consumes=MediaType.MULTIPART_FORM_DATA_VALUE,
+    produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> uploadS3(
+    @RequestPart MultipartFile picture,
+    @RequestPart String comment) throws IOException {
+        
+        String uid = s3Svc.upload(picture);
+
+        String json = Json.createObjectBuilder()
+            .add("uid", uid)
+            .build().toString();
+        
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(json);
+    }
+
+    @GetMapping(path="/images3/{key}")
+    public ResponseEntity<String> getMethodName(@PathVariable String key) throws IOException {
+        
+        // retrieve image with key from S3
+        String img = s3Svc.download(key);
+        System.out.println("Response" + img);
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(img);
+    }
+    
+
 }

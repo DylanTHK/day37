@@ -10,7 +10,8 @@ import { UploadService } from 'src/app/services/upload.service';
 })
 export class DisplayComponent implements OnInit, OnDestroy{
 
-  imgForm!: FormGroup;
+  sqlForm!: FormGroup;
+  s3Form!: FormGroup;
 
   imgData: any = "";
 
@@ -21,10 +22,13 @@ export class DisplayComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     // initialise form
-    this.imgForm = this.fb.group({
+    this.sqlForm = this.fb.group({
       uid: this.fb.control<string>('71e434d5', [Validators.required])
     })
-    // subscribe to changes in UploadService
+    this.s3Form = this.fb.group({
+      uid: this.fb.control<string>('13fafa67', [Validators.required])
+    })
+    // subscribe to changes in UploadService.imgsub
     this.imgSub$ = this.uploadSvc.imgSub.subscribe(
       data => {
         this.imgData = data;
@@ -32,12 +36,17 @@ export class DisplayComponent implements OnInit, OnDestroy{
     );
   }
 
-  ngOnDestroy(): void {
-      this.imgSub$.unsubscribe();
+  getImage() {
+    const uid = this.sqlForm.get("uid")?.value;
+    this.uploadSvc.getImage(uid);
   }
 
-  getImage() {
-    const uid = this.imgForm.get("uid")?.value;
-    this.uploadSvc.getImage(uid);
+  getS3Image() {
+    const uid = this.s3Form.get("uid")?.value;
+    this.uploadSvc.getS3Image(uid);
+  }
+
+  ngOnDestroy(): void {
+      this.imgSub$.unsubscribe();
   }
 }

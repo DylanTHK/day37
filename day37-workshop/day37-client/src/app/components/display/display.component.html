@@ -5,7 +5,13 @@
 </div>
 <!-- display all the images here -->
 
-<form [formGroup]="imgForm" (ngSubmit)="getImage()">
+<form [formGroup]="sqlForm" (ngSubmit)="getImage()">
+    UID: 
+    <input type="text" formControlName="uid">
+    <button type="submit">Get Image (SQL)</button>
+</form>
+
+<form [formGroup]="s3Form" (ngSubmit)="getS3Image()">
     UID: 
     <input type="text" formControlName="uid">
     <button type="submit">Get Image</button>

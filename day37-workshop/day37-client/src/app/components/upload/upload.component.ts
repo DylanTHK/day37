@@ -10,6 +10,7 @@ import { UploadService } from 'src/app/services/upload.service';
 })
 export class UploadComponent implements OnInit{
   
+  // File is an image file with various image meta data
   image!: File;
   form!: FormGroup;
 
@@ -27,20 +28,15 @@ export class UploadComponent implements OnInit{
       })
   }
 
-  // change event method to update image when picture uploaded
+  // UPDATES image (activated when changed detected)
   onImageUpdate(event: any) {
     this.image = event.target.files[0] as File;
     // console.info("Image value: ", this.image);
   }
 
-  // TODO: call service to upload with given information
+  // call service to upload with given information
   upload() {
-    // FIXME: how to extract file from form
-    // const imgBlob = this.form.get("image")?.value; // not useable
-    // console.info("Image: ", imgBlob);
-
     const comment = this.form.get("comment")?.value;
-
     const formData = new FormData();
     formData.set("comment", comment);
     formData.set("picture", this.image);
@@ -59,16 +55,24 @@ export class UploadComponent implements OnInit{
 
   }
 
-  // FIXME: remove if not used
-  // dataUriToBlob(dataUri: string) {
-  //   var byteString = atob(dataUri.split(',')[1]);
-  //   let mimeString = dataUri.split(',')[0].split(';')[0];
-  //   var ab = new ArrayBuffer(byteString.length)
-  //   var ia = new Uint8Array(ab)
-  //   for(var i =0; i <byteString.length; i++){
-  //     ia[i] = byteString.charCodeAt(i);
-  //   }
-  //   return new Blob([ab], {type: mimeString});
-  // }
+  uploadS3() {
+    const comment = this.form.get("comment")?.value;
+    // populate form
+    const formData = new FormData();
+    formData.set("comment", comment);
+    formData.set("picture", this.image);
+
+    // Make request from S3 Service
+    this.uploadSvc.uploadS3Image(formData)
+      // resolve promise
+      .then(result => {
+        this.router.navigate(['/'])
+        console.info("Results from httpCall:", result);
+      })
+      // reject promise
+      .catch(error => {
+        console.error(error);
+      })
+  }
 
 }

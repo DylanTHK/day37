@@ -3,9 +3,6 @@
 <form [formGroup]="form" (ngSubmit)="upload()">
     <table>
         <tr>
-            <!-- TODO: update img when upload -->
-        </tr>
-        <tr>
             <td>
                 Image: 
             </td>
@@ -23,7 +20,16 @@
                 <input type="text" placeholder="comments" formControlName="comment">
             </td>
         </tr>
-        <button type="submit">Upload Image</button>
+        <tr>
+            <td>
+                <!-- button to upload to SQL -->
+                <button type="submit">Upload Image</button>
+            </td>
+            <td>
+                <!-- second button to upload to S3 (DO) -->
+                <button type="button" (click)="uploadS3()">Upload S3</button>
+            </td>
+        </tr>
     </table>
-
 </form>
+
