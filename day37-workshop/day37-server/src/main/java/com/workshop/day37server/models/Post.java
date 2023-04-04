@@ -48,9 +48,11 @@ public class Post {
 
     public JsonObject toJson() {
         final String BASE64_PREFIX_DECODER = "data:image/png;base64,";
+        // 1. converting bytes[] to encodedString
         String encodedString = Base64.getEncoder().encodeToString(image);
         return Json.createObjectBuilder()
-            .add("image", BASE64_PREFIX_DECODER + encodedString)
+            // 2. appending prefix to encodedString
+            .add("image", BASE64_PREFIX_DECODER + encodedString) 
             .add("comment", comment)
             .add("uid", uid)
             .build();

@@ -1,3 +1,12 @@
 <h1>All Images Uploaded</h1>
-
+<div>
+    <img src="{{ imgData }}">
+    <p>{{ imgData }}</p>
+</div>
 <!-- display all the images here -->
+
+<form [formGroup]="imgForm" (ngSubmit)="getImage()">
+    UID: 
+    <input type="text" formControlName="uid">
+    <button type="submit">Get Image</button>
+</form>

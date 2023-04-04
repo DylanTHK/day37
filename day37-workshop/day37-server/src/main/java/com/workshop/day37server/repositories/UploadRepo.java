@@ -23,16 +23,22 @@ public class UploadRepo {
     private JdbcTemplate jdbcTemplate;
 
     // method to post data to sql
-    public Integer insertData(String comment, MultipartFile file) throws IOException {
+    public Post insertData(String comment, MultipartFile file) throws IOException {
         String uid = generateUUID();
         int result = jdbcTemplate.update(SQL_INSERT_IMAGE, uid, file.getInputStream(), comment);
         System.out.println("Number of rows updated: " + result);
-        return result;
+        if (result > 0) {
+            Post p = new Post();
+            p.setUid(uid);
+            p.setComment(comment);
+            p.setImage(file.getInputStream().readAllBytes());
+            return p;
+        }
+        return null;
     }
 
-    // TODO: method to get data (Result set) from sql
+    // method to get data (Result set) from sql
     public Optional<Post> getDataById(String id) {
-
         return jdbcTemplate.query(
             SQL_GET_IMAGE_BY_ID,
             (ResultSet rs) -> {
@@ -43,23 +49,11 @@ public class UploadRepo {
             }, 
             id
         );
-
-
-        // create a Post Object
-        // if(rowSet.next()) {
-        //     ResultSet rs = rowSet.getResultSet();
-        //     String uid = rs.getString("uid");
-        //     String comment = rs.getString("comment");
-        //     byte[] blobc = rs.getBytes("blobc");
-        //     System.out.println(rs.getString("blobc"));
-        //     System.out.println(rs.getString("comment"));
-        // }
-
     }
 
+    // Method to generate 8 char random id
     private String generateUUID() {
         UUID uuid = UUID.randomUUID();
-        System.out.println("UUID: " + uuid.toString());
         return uuid.toString().substring(0,8);
     }
     
